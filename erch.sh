@@ -209,6 +209,8 @@ echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 
 echo "KEYMAP=""$kbLayout""" >> /etc/vconsole.conf
 
+locale-gen
+
 echo "${hostName}" >> /etc/hostname
 
 echo "127.0.0.1 localhost" >> /etc/hosts
