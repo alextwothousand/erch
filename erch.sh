@@ -78,7 +78,7 @@ stdin -n1 res
 if [[ $res == "y" ]]
 then
 	stdout "Please enter the keyboard layout you would like to use."
-	read kbLayout
+	stdin kbLayout
 fi
 
 # just for testing purposes. ensures we have sudo permission.
@@ -219,8 +219,8 @@ echo "127.0.1.1 ""${hostName}"".localdomain ""${hostName}""" >> /etc/hosts
 
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
-echo "[multilib-testing]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-echo "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+printf "[multilib-testing]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+printf "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 
 pacman -Syyu --needed --noconfirm
 
