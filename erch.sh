@@ -191,7 +191,7 @@ fi
 
 swapon /dev/"${diskName}"1
 
-pacstrap /mnt base linux linux-firmware dhcpcd sudo nano grub
+pacstrap /mnt base linux linux-firmware
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -226,6 +226,13 @@ pacman -Syyu --needed --noconfirm
 
 passwd
 
+pacman -S dhcpcd sudo nano grub --needed --noconfirm
+pacman -S xfce4 xfce4-goodies --needed --noconfirm
+pacman -S lightdm lightdm-gtk-greeter --needed --noconfirm
+
+systemctl enable dhcpcd
+systemctl enable lightdm
+
 if [[ $efi == true ]]
 then
 	mkdir /efi
@@ -243,12 +250,6 @@ useradd "${userName}"
 passwd "${userName}"
 
 usermod -aG wheel "${userName}"
-
-pacman -S xfce4 xfce4-goodies --needed --noconfirm
-pacman -S lightdm lightdm-gtk-greeter --needed --noconfirm
-
-systemctl enable dhcpcd
-systemctl enable lightdm
 
 exit
 
