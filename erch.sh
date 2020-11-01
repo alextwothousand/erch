@@ -105,7 +105,7 @@ hostName=""
 while [[ $hostName == "" ]]
 do
 	stdout "Please enter a system hostname"
-	stdin $hostName
+	stdin hostName
 done
 
 stdout "OK. That should be all for now. Before we begin, a small disclaimer."
