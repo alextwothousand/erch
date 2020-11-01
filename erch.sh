@@ -101,8 +101,7 @@ do
 	stdin diskName
 done
 
-$hostName=""
-
+hostName=""
 while [[ $hostName == "" ]]
 do
 	stdout "Please enter a system hostname"
