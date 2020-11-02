@@ -46,8 +46,8 @@ then
 	exit
 fi
 
-dmesg | grep -q "EFI v"    # -q tell grep to output nothing
-if [ $? -eq 0 ]     # check exit code; if 0 EFI, else BIOS
+    # -q tell grep to output nothing
+if ! dmesg | grep -q "EFI v";     # check exit code; if 0 EFI, else BIOS
 then
     efi=true
 else
@@ -213,8 +213,11 @@ locale-gen
 
 echo "${hostName}" >> /etc/hostname
 
-echo "127.0.0.1 localhost" >> /etc/hosts
-echo "::1 localhost" >> /etc/hosts
+{ 
+	echo "127.0.0.1 localhost"
+	"::1 localhost" 
+} >> /etc/hosts
+#echo "::1 localhost" >> /etc/hosts
 echo "127.0.1.1 ""${hostName}"".localdomain ""${hostName}""" >> /etc/hosts
 
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
