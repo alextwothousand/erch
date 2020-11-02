@@ -106,7 +106,7 @@ do
 	stdin hostName
 done
 
-ping 1.1.1.1
+ping 1.1.1.1 -c 4
 
 stdout "Was this ping request to Cloudflare's servers successful? (y/n)"
 stdin -n1 res
@@ -129,7 +129,7 @@ then
 		if [[ $res == "y" || $res == "Y" ]]
 		then
 			iwctl
-			ping 1.1.1.1
+			ping 1.1.1.1 -c 4
 
 			stdout "Was the ping request to Cloudflare's servers successful? (y/n)"
 			stdin -n1 res
