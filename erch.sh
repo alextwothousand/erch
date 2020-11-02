@@ -100,11 +100,48 @@ do
 done
 
 hostName=""
-while [[ "${hostName}" == "" ]]
+while [[ ${hostName} == "" ]]
 do
 	stdout "Please enter a system hostname"
 	stdin hostName
 done
+
+ping 1.1.1.1
+
+stdout "Was this ping request to Cloudflare's servers successful? (y/n)"
+stdin -n1 res
+
+if [[ $res == "n" || $res == "N" ]]
+then
+	ip link
+
+	stdout "Is your network interface listed and enabled? (y/n)"
+	stdin -n1 res
+
+	if [[ $res == "n" || $res == "N" ]]
+	then
+		stdout "You will need to plug in a Ethernet cable, or authenticate to the wireless network using iwctl."
+		exit
+	else
+		stdout "Are you using a wireless connection? (y/n)"
+		stdin -n1 res
+
+		if [[ $res == "y" || $res == "Y" ]]
+		then
+			iwctl
+			ping 1.1.1.1
+
+			stdout "Was the ping request to Cloudflare's servers successful? (y/n)"
+			stdin -n1 res
+
+			if [[ $res == "n" || $res == "N" ]]
+			then
+				stdout "It appears as if you have a hardware issue. Please attempt to mitigate the issue, or create a issue on GitHub with the error code ER0001."
+				exit
+			fi
+		fi
+	fi
+fi
 
 stdout "OK. That should be all for now. Before we begin, a small disclaimer."
 
@@ -127,7 +164,7 @@ fi
 
 stdout "Starting installation... This could take roughly from 5-10 minutes, depending on your internet speed."
 
-mkdir /mnt
+timedatectl set-ntp true
 
 # create swap partition
 (
@@ -166,8 +203,6 @@ then
 		echo w
 		echo q
 	) | sudo fdisk /dev/"$diskName"
-
-	mkfs.ext4 /dev/"${diskName}"3
 else
 	(
 		echo n
@@ -178,16 +213,19 @@ else
 		echo w
 		echo q
 	) | sudo fdisk /dev/"$diskName"
-
-	mkfs.ext4 /dev/"${diskName}"3
 fi
 
 mkswap /dev/"${diskName}"1
 
+mkdir /mnt
+mkdir /mnt/efi
+
 if [[ $efi == true ]]
 then
+	mkfs.ext4 /dev/"${diskName}"3
 	mount /dev/"${diskName}"3 /mnt
 else
+	mkfs.ext4 /dev/"${diskName}"2
 	mount /dev/"${diskName}"2 /mnt
 fi
 
