@@ -30,6 +30,9 @@ kbLayout="us"
 #empty
 userName=""
 res=""
+rootPass=""
+userName=""
+userPass=""
 
 # start of script
 stdout """$clrFgGreen""""$fmtBold""============================================""$fmtReset"""
@@ -142,6 +145,25 @@ then
 		fi
 	fi
 fi
+
+while [[ $rootPass == "" ]]
+do
+	stdout "Please enter a root account password."
+	stdin rootPass
+done
+
+while [[ $userName == "" ]]
+do
+	stdout "Please enter a new user account name."
+	stdin userName
+done
+
+while [[ $userPass == "" || $userPass == "${rootPass}" ]]
+do
+	stdout "Please enter a password for your new user account. This should differ from your root account password."
+	stdin userPass
+done
+
 
 stdout "OK. That should be all for now. Before we begin, a small disclaimer."
 
@@ -267,7 +289,10 @@ printf "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 
 pacman -Syyu --needed --noconfirm
 
-passwd
+(
+	echo $rootPass
+	echo $rootPass
+) | passwd
 
 pacman -S dhcpcd sudo nano grub --needed --noconfirm
 pacman -S xfce4 xfce4-goodies --needed --noconfirm
@@ -286,11 +311,12 @@ fi
 
 grub-mkconfig -o /boot/grub/grub.cfg
 
-stdout "Please enter your new user account name:"
-stdin userName
+useradd $userName
 
-useradd "${userName}"
-passwd "${userName}"
+(
+	echo $userPass
+	echo $userPass
+) | passwd $userName
 
 usermod -aG wheel "${userName}"
 
