@@ -195,7 +195,7 @@ pacstrap /mnt base linux linux-firmware
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
-arch-chroot /mnt
+arch-chroot /mnt /bin/bash <<EOF
 
 ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 
@@ -255,6 +255,7 @@ passwd "${userName}"
 usermod -aG wheel "${userName}"
 
 exit
+EOF
 
 umount -R /mnt
 
