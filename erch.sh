@@ -127,6 +127,8 @@ fi
 
 stdout "Starting installation... This could take roughly from 5-10 minutes, depending on your internet speed."
 
+mkdir /mnt
+
 # create swap partition
 (
 	echo n
